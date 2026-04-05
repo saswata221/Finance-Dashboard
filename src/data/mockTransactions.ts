@@ -1,0 +1,123 @@
+import type { Transaction } from '../types'
+
+const id = () => crypto.randomUUID()
+
+/** Static mock dataset — used when localStorage is empty */
+export const MOCK_TRANSACTIONS: Transaction[] = [
+  {
+    id: id(),
+    date: '2026-03-02',
+    amount: 5200,
+    category: 'Salary',
+    type: 'income',
+    description: 'Monthly salary',
+  },
+  {
+    id: id(),
+    date: '2026-03-05',
+    amount: 89.5,
+    category: 'Food',
+    type: 'expense',
+    description: 'Groceries',
+  },
+  {
+    id: id(),
+    date: '2026-03-08',
+    amount: 1200,
+    category: 'Freelance',
+    type: 'income',
+    description: 'Design project',
+  },
+  {
+    id: id(),
+    date: '2026-03-10',
+    amount: 45,
+    category: 'Transport',
+    type: 'expense',
+    description: 'Transit pass',
+  },
+  {
+    id: id(),
+    date: '2026-03-14',
+    amount: 210,
+    category: 'Shopping',
+    type: 'expense',
+    description: 'Clothing',
+  },
+  {
+    id: id(),
+    date: '2026-03-18',
+    amount: 165,
+    category: 'Bills',
+    type: 'expense',
+    description: 'Utilities',
+  },
+  {
+    id: id(),
+    date: '2026-03-22',
+    amount: 72,
+    category: 'Food',
+    type: 'expense',
+    description: 'Dining out',
+  },
+  {
+    id: id(),
+    date: '2026-03-25',
+    amount: 35,
+    category: 'Entertainment',
+    type: 'expense',
+    description: 'Streaming',
+  },
+  {
+    id: id(),
+    date: '2026-04-01',
+    amount: 5200,
+    category: 'Salary',
+    type: 'income',
+    description: 'Monthly salary',
+  },
+  {
+    id: id(),
+    date: '2026-04-02',
+    amount: 128,
+    category: 'Food',
+    type: 'expense',
+    description: 'Groceries',
+  },
+  {
+    id: id(),
+    date: '2026-04-03',
+    amount: 299,
+    category: 'Shopping',
+    type: 'expense',
+    description: 'Electronics accessory',
+  },
+  {
+    id: id(),
+    date: '2026-04-03',
+    amount: 60,
+    category: 'Health',
+    type: 'expense',
+    description: 'Pharmacy',
+  },
+  {
+    id: id(),
+    date: '2026-04-04',
+    amount: 450,
+    category: 'Bills',
+    type: 'expense',
+    description: 'Internet & phone',
+  },
+]
+
+export const CATEGORY_OPTIONS = [
+  'Food',
+  'Transport',
+  'Shopping',
+  'Bills',
+  'Entertainment',
+  'Health',
+  'Salary',
+  'Freelance',
+  'Other',
+] as const
