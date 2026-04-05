@@ -1,53 +1,133 @@
+<div align="center">
+
 # Finance Dashboard
 
-A small **React + TypeScript + Tailwind CSS** dashboard for tracking a personal finance snapshot: summary cards, trend and category charts, filterable transactions, role-based UI, and derived insights. Data is **mock/static** with optional **localStorage** persistence—no backend.
+**A responsive personal-finance snapshot UI** — balances, trends, category breakdown, and a full activity list.  
+Runs entirely in the browser: **no backend**, data optional **`localStorage`** persistence.
 
-## Setup
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-Requirements: **Node.js 18+** and npm.
+[Quick start](#-quick-start) · [Features](#-what-you-get) · [Deploy](#-deploy-to-vercel) · [Folder map](#-project-layout)
 
-```bash
-npm install
-npm run dev
-```
-
-Open the URL shown in the terminal (usually `http://localhost:5173`).
-
-```bash
-npm run build    # production build to dist/
-npm run preview  # serve production build locally
-```
-
-## Approach
-
-- **Stack**: Vite, React 19, Tailwind CSS v4 (`@tailwindcss/vite`), [Recharts](https://recharts.org/) for charts.
-- **State**: A single `useReducer` plus React Context (`DashboardProvider`) holds transactions, filters (category, type, search), sort (date/amount and direction), **role** (`viewer` | `admin`), and **theme**. Derived values (filtered list, summary totals, chart series, insights) are computed with `useMemo`.
-- **Persistence**: On change, transactions, role, and theme are saved under `localStorage` key `fd-finance-dashboard-v1`. Clearing site data or using **Reset demo** (admin) restores the built-in mock dataset.
-- **RBAC (simulated)**: **Viewer** sees all data but cannot add, edit, or delete transactions. **Admin** can add/edit (modal form) and delete, and can reset to demo data. Switch roles from the header dropdown.
-
-## Features (assignment mapping)
-
-| Requirement | Implementation |
-|-------------|----------------|
-| Summary cards | Total balance (starting balance + net flow), total income, total expenses |
-| Time-based chart | Line chart: running balance by date |
-| Category chart | Donut-style pie: expenses by category |
-| Transactions | Table: date, description, category, type, amount; search + category/type filters; sort by date or amount (toggle direction) |
-| Role UI | Header role select + read-only vs edit affordances |
-| Insights | Top expense category, month-over-month expense %, net flow, savings rate, average expense size |
-| UX | Responsive layout, dark mode toggle, empty states (no data / no filter matches), CSV & JSON export of the **currently filtered** list |
-
-## Project structure (high level)
-
-- `src/context/DashboardContext.tsx` — reducer, persistence, selectors, export helpers, `useInsights`
-- `src/data/mockTransactions.ts` — seed transactions and category list
-- `src/components/` — layout sections (header, cards, charts, insights, transactions, modal)
-
-## Assumptions
-
-- Currency display uses `Intl.NumberFormat` with **USD**; amounts are plain numbers in mock data.
-- **Starting balance** for the trend line is a fixed mock constant (`2400`) so the chart shows a sensible running total before the first dated transaction.
+</div>
 
 ---
 
-Built for a frontend evaluation exercise; not intended as production financial software.
+## Why use it?
+
+| | |
+|:---|:---|
+| **See money at a glance** | Total balance, income, and expenses with animated summary cards (INR / Indian formatting). |
+| **Spot patterns** | Line chart for balance over time, pie chart for spending by category, insights panel for trends. |
+| **Manage activity** | Search, filter, sort transactions; export filtered rows as **CSV** or **JSON**. |
+| **Light & dark** | Theme toggle + matching header logos; preference is saved. |
+
+> **Heads-up:** This is a **demo / evaluation** front end, not regulated financial software. Numbers are yours only in **this browser** (local storage).
+
+---
+
+## Quick start
+
+You need **[Node.js 18+](https://nodejs.org/)** and **npm**.
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Start dev server (hot reload)
+npm run dev
+```
+
+Open the URL printed in the terminal — usually **http://localhost:5173**.
+
+| Command | What it does |
+|--------|----------------|
+| `npm run dev` | Development server |
+| `npm run build` | Typecheck + production bundle → `dist/` |
+| `npm run preview` | Serve the production build locally |
+
+---
+
+## Using the app (2-minute tour)
+
+1. **Header** — Switch **Viewer** vs **Admin**, toggle **dark mode**, download **CSV/JSON** (exports whatever is **currently filtered** in Activity). As **Admin**, you can **Reset demo** to restore seed data.
+2. **Summary cards** — Total balance uses a fixed **starting balance** (₹2,400 in code) plus all transactions; income/expense are lifetime totals.
+3. **Charts** — Balance trend uses days that have transactions; spending pie uses **expenses only**, by category.
+4. **Insights** — Mix of **calendar-month** stats (e.g. net this month) and **all-time** rollups (e.g. top category, avg expense); read the subtitles on each block.
+5. **Activity** — **Viewer**: read-only. **Admin**: **Add**, **Edit**, **Delete** rows (modal is centered on screen).
+
+Your **transactions, role, and theme** persist under the key `fd-finance-dashboard-v1` in **localStorage** until you clear site data or reset.
+
+---
+
+## What you get
+
+| Area | Details |
+|------|---------|
+| **Summary** | Balance · income · expenses · subtle hover motion on icons |
+| **Balance trend** | Recharts line · friendly date labels (e.g. `3 mar`) · compact Y-axis for large INR |
+| **Spending breakdown** | Donut-style pie + legend with amounts and % |
+| **Insights** | Top spend category, vs last month %, net this month, savings rate, avg expense, transaction count |
+| **Activity** | Filters (category, type), search, sort date/amount with direction toggle; responsive row layout |
+| **Accessibility** | Labels, `aria` on sections, keyboard-friendly controls where it matters |
+
+---
+
+## Tech stack
+
+- **Vite** + **React 19** + **TypeScript**
+- **Tailwind CSS v4** (`@tailwindcss/vite`)
+- **Recharts** for charts
+- **Context + `useReducer`** for global state; **`useMemo`** for derived data
+
+---
+
+## Project layout
+
+```
+src/
+├── App.tsx                 # Page shell + provider wrap
+├── main.tsx                # React mount
+├── index.css               # Tailwind + motion tokens
+├── types.ts                # Transaction, role, filters
+├── context/
+│   └── DashboardContext.tsx   # State, persistence, exports, useInsights
+├── data/
+│   └── mockTransactions.ts    # Seed data + category options
+├── components/             # Header, cards, charts, insights, transactions, modal
+├── hooks/
+│   └── useAnimatedNumber.ts
+└── lib/
+    └── currency.ts         # INR formatters (en-IN)
+```
+
+Static assets: **`public/`** (e.g. theme logos, favicon).
+
+---
+
+## Deploy to Vercel
+
+1. Push this repo to **GitHub** (or GitLab / Bitbucket).
+2. In [Vercel](https://vercel.com): **New Project** → import the repo.
+3. Preset **Vite** (or manual): **Build** `npm run build`, **Output** `dist`.
+
+Every push to your production branch redeploys automatically.
+
+---
+
+## Assumptions & notes
+
+- Currency is **INR** via `Intl.NumberFormat('en-IN', …)`.
+- **Starting balance** for the running-balance chart is the constant **`INITIAL_BALANCE`** in `DashboardContext.tsx` (currently `2400`).
+- No API keys or env vars required for the default app.
+
+---
+
+<div align="center">
+
+**Built as a frontend exercise** — extend or fork as you like.
+
+</div>
